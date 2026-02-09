@@ -22,6 +22,20 @@ class LParser:
 
     # -----------------------↑Do not change↑-----------------------
 
+    # Context-free grammar G for L is:
+    #
+    # Statements -> Statement ; Statements | end
+    # Statement -> id = Expr | print id
+    # Expr -> Term | Term + Expr | Term – Expr
+    # Term -> Factor | Factor * Term
+    # Factor -> int | id | ( Expr )
+    #
+    # Non-terminals are:
+    # Statements (start symbol), Statement, Expr, Term, and Factor.
+    #
+    # Tokens/terminals are:
+    # ; end id = print + - * int ( )
+    #
     # The intermediate language consists of the following commands:
     # PUSH op : pushes the operand op onto the stack.
     # ADD : pops the two top elements from the stack, adds their values
@@ -36,7 +50,25 @@ class LParser:
     # PRINT : prints the value currently on top of the stack.
 
     def statements(self):
+        # Statements -> Statement ; Statements | end
         pass
 
-    def error(self):
+    def statement(self):
+        # Statement -> id = Expr | print id
+        pass
+
+    def expr(self):
+        # Expr -> Term | Term + Expr | Term – Expr
+        pass
+
+    def term(self):
+        # Term -> Factor | Factor * Term
+        pass
+
+    def factor(self):
+        # Factor -> int | id | ( Expr )
+        pass
+
+    @staticmethod
+    def error():
         raise Exception("Syntax error")
