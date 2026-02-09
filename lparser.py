@@ -49,22 +49,27 @@ class LParser:
     #          element (a value) to the second element (a variable).
     # PRINT : prints the value currently on top of the stack.
 
+    # statements() -> statement() LToken.SEMICOL statements() | LToken.END
     def statements(self):
         # Statements -> Statement ; Statements | end
         pass
 
+    # statement() -> LToken.ID LToken.ASSIGN expr() | LToken.PRINT LToken.ID
     def statement(self):
         # Statement -> id = Expr | print id
         pass
 
+    # expr() -> term() | term() LToken.PLUS expr() | term() LToken.MINUS expr()
     def expr(self):
         # Expr -> Term | Term + Expr | Term – Expr
         pass
 
+    # term() -> factor() | factor() LToken.MULT term()
     def term(self):
         # Term -> Factor | Factor * Term
         pass
 
+    # factor() -> LToken.INT | LToken.ID | LToken.RPAREN expr() LToken.LPAREN
     def factor(self):
         # Factor -> int | id | ( Expr )
         pass
