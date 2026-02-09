@@ -22,26 +22,20 @@ class LParser:
 
     # -----------------------↑Do not change↑-----------------------
 
-    # One function for each of these:
-    # - Statements (start_symbol)
-    # - Statement
-    # - Expr
-    # - Term
-    # - Factor
-    # I *think* they should be here:
+    # The intermediate language consists of the following commands:
+    # PUSH op : pushes the operand op onto the stack.
+    # ADD : pops the two top elements from the stack, adds their values
+    #       and pushes the result back onto the stack.
+    # SUB : pops the two top elements from the stack, subtracts the first
+    #       value retrieved from the second value,
+    #       and pushes the result back onto the stack.
+    # MULT : pops the two top elements from the stack, multiplies their
+    #        values and pushes the result back onto the stack.
+    # ASSIGN : pops the two top elements from the stack, assigns the first
+    #          element (a value) to the second element (a variable).
+    # PRINT : prints the value currently on top of the stack.
+
     def statements(self):
-        pass
-
-    def statement(self):
-        pass
-
-    def expr(self):
-        pass
-
-    def term(self):
-        pass
-
-    def factor(self):
         pass
 
     def error(self):

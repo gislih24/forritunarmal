@@ -39,11 +39,3 @@ class LToken:
 
     def __repr__(self) -> str:
         return f"LToken({self.name}, {self.lexeme})"
-
-
-# bla = LToken("", 0)
-# bla.token_code = 1
-# print(bla)
-# print(bla.name)
-# print(bla.token_code)
-# print(bla)
