@@ -66,7 +66,7 @@ class LLexer:
 
         # Skip whitespace.
         self._read_next_char()
-        while self.curr_char != "" and self.curr_char.isspace():
+        while self.curr_char.isspace():
             self._read_next_char()
 
         # When we reach EOF: treat it as an error so the parser prints "Syntax
