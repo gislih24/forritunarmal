@@ -7,6 +7,7 @@ from llexer import LLexer
 class LParser:
     def __init__(self, lexer: LLexer) -> None:
         self.lexer: LLexer = lexer
+        self.curr_token: LToken = LToken()
 
     # -----------------------↓Do not change↓-----------------------
     def parse(self) -> None:
