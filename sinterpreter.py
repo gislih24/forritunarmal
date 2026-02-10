@@ -51,7 +51,7 @@ class SInterpreter:
                     f"Variable {var} not found in storage and cannot be converted to int."
                 )
 
-    def _push(self, op) -> None:
+    def _push(self, op: str) -> None:
         # Pushes the operand op onto the stack.
         self._stack.append(op)
 
@@ -60,7 +60,7 @@ class SInterpreter:
         # pushes the result back onto the stack.
         var1: int = self._pop_var_from_stack()
         var2: int = self._pop_var_from_stack()
-        self._push(var1 + var2)
+        self._push(str(var1 + var2))
 
     def _sub(self) -> None:
         # Pops the two top elements from the stack, subtracts the first value
@@ -68,14 +68,14 @@ class SInterpreter:
         # stack.
         var1: int = self._pop_var_from_stack()
         var2: int = self._pop_var_from_stack()
-        self._push(var1 - var2)
+        self._push(str(var1 - var2))
 
     def _mult(self) -> None:
         # Pops the two top elements from the stack, multiplies their values and
         # pushes the result back onto the stack.
         var1: int = self._pop_var_from_stack()
         var2: int = self._pop_var_from_stack()
-        self._push(var1 * var2)
+        self._push(str(var1 * var2))
 
     def _assign(self) -> None:
         # Pops the two top elements from the stack, assigns the first element
