@@ -54,7 +54,6 @@ class LParser:
     def statements(self):
         # Statements -> Statement ; Statements | end
         if self.curr_token.token_code == LToken.END:
-            print(self.ret_str)
             return
         elif self.curr_token.token_code in (LToken.ID, LToken.PRINT):
             # Parse a single statement, then expect ';' and continue.
@@ -75,8 +74,8 @@ class LParser:
             self.next_token()
             if self.curr_token.token_code != LToken.ID:
                 self.error()
-            self.ret_str += f"PUSH {self.curr_token.lexeme}\n"
-            self.ret_str += "PRINT\n"
+            print(f"PUSH {self.curr_token.lexeme}")
+            print("PRINT")
             # consume identifier
             self.next_token()
             return
@@ -84,7 +83,7 @@ class LParser:
             # assignment: id = Expr
             var_name = self.curr_token.lexeme
             # push the variable first so it's beneath the value on the stack
-            self.ret_str += f"PUSH {var_name}\n"
+            print(f"PUSH {var_name}")
             # consume 'id'
             self.next_token()
             # expect '='
@@ -95,7 +94,7 @@ class LParser:
             # parse the expression (produces the value on top of stack)
             self.expr()
             # perform assignment: pop value, then variable
-            self.ret_str += "ASSIGN\n"
+            print("ASSIGN")
             return
         else:
             self.error()
@@ -109,7 +108,7 @@ class LParser:
             op = self.curr_token.token_code
             self.next_token()  # consume '+' or '-'
             self.term()
-            self.ret_str += "ADD\n" if op == LToken.PLUS else "SUB\n"
+            print("ADD" if op == LToken.PLUS else "SUB")
 
     # term() -> factor() | factor() LToken.MULT term()
     def term(self):
@@ -118,7 +117,7 @@ class LParser:
         if self.curr_token.token_code == LToken.MULT:
             self.next_token()
             self.term()
-            self.ret_str += "MULT\n"
+            print("MULT")
 
     # factor() -> LToken.INT | LToken.ID | LToken.RPAREN expr() LToken.LPAREN
     def factor(self):
@@ -136,13 +135,13 @@ class LParser:
             return
         # int
         if self.curr_token.token_code == LToken.INT:
-            self.ret_str += f"PUSH {self.curr_token.lexeme}\n"
+            print(f"PUSH {self.curr_token.lexeme}")
             self.next_token()
             return
 
         # id
         if self.curr_token.token_code == LToken.ID:
-            self.ret_str += f"PUSH {self.curr_token.lexeme}\n"
+            print(f"PUSH {self.curr_token.lexeme}")
             self.next_token()
             return
         self.error()
