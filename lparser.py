@@ -73,7 +73,15 @@ class LParser:
     #         | term() LToken.MINUS expr()
     def expr(self):
         # Expr -> Term | Term + Expr | Term – Expr
-        pass
+        self.term()  # term() is always the first thing we need to process.
+        if self.curr_token is LToken.PLUS:  # LToken.PLUS expr()
+            self.eat(LToken.PLUS)  # LToken.PLUS
+            self.expr()  # expr()
+            print("ADD")
+        elif self.curr_token is LToken.MINUS:  # LToken.MINUS expr()
+            self.eat(LToken.MINUS)
+            self.expr()
+            print("SUB")
 
     # term() -> factor()
     #         | factor() LToken.MULT term()
