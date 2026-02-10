@@ -106,3 +106,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+# Windows (Powershell) commands to compile and run everything:
+# Get-Content .\program.l | python .\lcompiler.py > .\program.s
+# Get-Content .\program.s | python .\sinterpreter.py
