@@ -26,6 +26,9 @@ class SInterpreter:
                 self._push(operations[1])
             elif operations[0] in self.COMMANDS:
                 self.COMMANDS[operations[0]]()
+            elif operations[0] == "Syntax" and operations[1] == "error":
+                print("Syntax error")
+                return
 
     # The intermediate language consists of the following commands:
 
