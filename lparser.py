@@ -65,6 +65,7 @@ class LParser:
             self.statements()
         else:
             self.error()
+        print(self.ret_str)
 
     # statement() -> LToken.ID LToken.ASSIGN expr() | LToken.PRINT LToken.ID
     def statement(self):
