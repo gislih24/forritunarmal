@@ -4,8 +4,8 @@ import sys
 class SInterpreter:
     def __init__(self) -> None:
         self._stack: list[str] = []  # Stack to hold intermediate values
-        self.variable_storage = {}  # Holds values of variables
-        self.COMMANDS = {
+        self.variable_storage: dict[str, int] = {}  # Holds values of variables
+        self.COMMANDS: dict[str, None] = {
             "ADD": self._add(),
             "SUB": self._sub(),
             "MULT": self._mult(),
@@ -14,7 +14,7 @@ class SInterpreter:
         }
 
     # The fetch-decode-execute cycle
-    def cycle(self):
+    def cycle(self) -> None:
         # Fetch
         for line in sys.stdin:
             line: str = line.rstrip("\n")
@@ -58,33 +58,33 @@ class SInterpreter:
     def _add(self) -> None:
         # Pops the two top elements from the stack, adds their values and
         # pushes the result back onto the stack.
-        var1 = self._pop_var_from_stack()
-        var2 = self._pop_var_from_stack()
+        var1: int = self._pop_var_from_stack()
+        var2: int = self._pop_var_from_stack()
         self._push(var1 + var2)
 
     def _sub(self) -> None:
         # Pops the two top elements from the stack, subtracts the first value
         # retrieved from the second value, and pushes the result back onto the
         # stack.
-        var1 = self._pop_var_from_stack()
-        var2 = self._pop_var_from_stack()
+        var1: int = self._pop_var_from_stack()
+        var2: int = self._pop_var_from_stack()
         self._push(var1 - var2)
 
     def _mult(self) -> None:
         # Pops the two top elements from the stack, multiplies their values and
         # pushes the result back onto the stack.
-        var1 = self._pop_var_from_stack()
-        var2 = self._pop_var_from_stack()
+        var1: int = self._pop_var_from_stack()
+        var2: int = self._pop_var_from_stack()
         self._push(var1 * var2)
 
     def _assign(self) -> None:
         # Pops the two top elements from the stack, assigns the first element
         # (a value) to the second element (a variable).
-        var1 = self._pop_var_from_stack()
-        var2 = self._pop_var_from_stack()
+        var1: int = self._pop_var_from_stack()
+        var2: str = self._stack.pop()
         self.variable_storage[var2] = var1
 
-    def _print(self):
+    def _print(self) -> None:
         # Prints the value currently on top of the stack.
         print(self._stack.pop())
 
