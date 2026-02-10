@@ -5,12 +5,12 @@ class SInterpreter:
     def __init__(self) -> None:
         self._stack: list[str] = []  # Stack to hold intermediate values
         self.variable_storage: dict[str, int] = {}  # Holds values of variables
-        self.COMMANDS: dict[str, None] = {
-            "ADD": self._add(),
-            "SUB": self._sub(),
-            "MULT": self._mult(),
-            "ASSIGN": self._assign(),
-            "PRINT": self._print(),
+        self.COMMANDS = {
+            "ADD": self._add,
+            "SUB": self._sub,
+            "MULT": self._mult,
+            "ASSIGN": self._assign,
+            "PRINT": self._print,
         }
 
     # The fetch-decode-execute cycle
@@ -23,7 +23,7 @@ class SInterpreter:
             if operations[0] == "PUSH":
                 self._push(operations[1])
             elif operations[0] in self.COMMANDS:
-                self.COMMANDS[operations[0]]
+                self.COMMANDS[operations[0]]()
 
     # The intermediate language consists of the following commands:
 
