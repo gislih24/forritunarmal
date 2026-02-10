@@ -8,6 +8,7 @@ class LParser:
     def __init__(self, lexer: LLexer) -> None:
         self.lexer: LLexer = lexer
         self.curr_token: LToken = LToken()
+        self.ret_str = ""
 
     # -----------------------↓Do not change↓-----------------------
     def parse(self) -> None:
@@ -52,27 +53,98 @@ class LParser:
     # statements() -> statement() LToken.SEMICOL statements() | LToken.END
     def statements(self):
         # Statements -> Statement ; Statements | end
-        pass
+        if self.curr_token.token_code == LToken.END:
+            return
+        elif self.curr_token.token_code in (LToken.ID, LToken.PRINT):
+            # Parse a single statement, then expect ';' and continue.
+            self.statement()
+            if self.curr_token.token_code != LToken.SEMICOL:
+                self.error()
+            # consume ';'
+            self.next_token()
+            self.statements()
+        else:
+            self.error()
 
     # statement() -> LToken.ID LToken.ASSIGN expr() | LToken.PRINT LToken.ID
     def statement(self):
         # Statement -> id = Expr | print id
-        pass
+        if self.curr_token.token_code == LToken.PRINT:
+            # consume 'print'
+            self.next_token()
+            if self.curr_token.token_code != LToken.ID:
+                self.error()
+            self.ret_str += f"PUSH {self.curr_token.lexeme}\n"
+            self.ret_str += "PRINT\n"
+            # consume identifier
+            self.next_token()
+            return
+        elif self.curr_token.token_code == LToken.ID:
+            # assignment: id = Expr
+            var_name = self.curr_token.lexeme
+            # push the variable first so it's beneath the value on the stack
+            self.ret_str += f"PUSH {var_name}\n"
+            # consume 'id'
+            self.next_token()
+            # expect '='
+            if self.curr_token.token_code != LToken.ASSIGN:
+                self.error()
+            # consume '='
+            self.next_token()
+            # parse the expression (produces the value on top of stack)
+            self.expr()
+            # perform assignment: pop value, then variable
+            self.ret_str += "ASSIGN\n"
+            return
+        else:
+            self.error()
 
     # expr() -> term() | term() LToken.PLUS expr() | term() LToken.MINUS expr()
     def expr(self):
         # Expr -> Term | Term + Expr | Term – Expr
-        pass
+        # Minimal implementation: just a Term for now
+        self.term()
+        while self.curr_token.token_code in (LToken.PLUS, LToken.MINUS):
+            op = self.curr_token.token_code
+            self.next_token()  # consume '+' or '-'
+            self.term()
+            self.ret_str += "ADD\n" if op == LToken.PLUS else "SUB\n"
 
     # term() -> factor() | factor() LToken.MULT term()
     def term(self):
         # Term -> Factor | Factor * Term
-        pass
+        self.factor()
+        if self.curr_token.token_code == LToken.MULT:
+            self.next_token()
+            self.term()
+            self.ret_str += "MULT\n"
 
     # factor() -> LToken.INT | LToken.ID | LToken.RPAREN expr() LToken.LPAREN
     def factor(self):
-        # Factor -> int | id | ( Expr )
-        pass
+        if self.curr_token.token_code == LToken.LPAREN:
+            # consume '('
+            self.next_token()
+
+            # parse expression
+            self.expr()
+
+            # require and consume ')'
+            if self.curr_token.token_code != LToken.RPAREN:
+                self.error()
+            self.next_token()
+            return
+        # int
+        if self.curr_token.token_code == LToken.INT:
+            self.ret_str += f"PUSH {self.curr_token.lexeme}\n"
+            self.next_token()
+            return
+
+        # id
+        if self.curr_token.token_code == LToken.ID:
+            self.ret_str += f"PUSH {self.curr_token.lexeme}\n"
+            self.next_token()
+            return
+        self.error()
 
     @staticmethod
     def error():
