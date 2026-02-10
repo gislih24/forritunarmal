@@ -70,7 +70,7 @@ class SInterpreter:
         # stack.
         var1: int = self._pop_var_from_stack()
         var2: int = self._pop_var_from_stack()
-        self._push(str(var1 - var2))
+        self._push(str(var2 - var1))
 
     def _mult(self) -> None:
         # Pops the two top elements from the stack, multiplies their values and
@@ -88,7 +88,7 @@ class SInterpreter:
 
     def _print(self) -> None:
         # Prints the value currently on top of the stack.
-        print(self._stack.pop())
+        print(self._pop_var_from_stack())
 
 
 # I have to use a stack(can use a list) here to process the intermediate code.
