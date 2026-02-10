@@ -71,16 +71,31 @@ class LParser:
     #              | LToken.PRINT LToken.ID
     def statement(self):
         # Statement -> id = Expr | print id
-        if self.curr_token.token_code == LToken.END:
-            return
-        elif self.curr_token.token_code in (LToken.ID, LToken.PRINT):
-            # Parse a single statement, then expect ';' and continue.
-            self.statement()
-            if self.curr_token.token_code != LToken.SEMICOL:
-                self.error()
-            # consume ';'
+        if self.curr_token.token_code == LToken.PRINT:
+            # consume 'print'
             self.next_token()
-            self.statements()
+            if self.curr_token.token_code != LToken.ID:
+                self.error()
+            print(f"PUSH {self.curr_token.lexeme}")
+            print("PRINT")
+            # consume identifier
+            self.next_token()
+        elif self.curr_token.token_code == LToken.ID:
+            # assignment: id = Expr
+            var_name = self.curr_token.lexeme
+            # push the variable first so it's beneath the value on the stack
+            print(f"PUSH {var_name}")
+            # consume 'id'
+            self.next_token()
+            # expect '='
+            if self.curr_token.token_code != LToken.ASSIGN:
+                self.error()
+            # consume '='
+            self.next_token()
+            # parse the expression (produces the value on top of stack)
+            self.expr()
+            # perform assignment: pop value, then variable
+            print("ASSIGN")
         else:
             self.error()
 
