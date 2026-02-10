@@ -49,7 +49,12 @@ class LParser:
     #          element (a value) to the second element (a variable).
     # PRINT : prints the value currently on top of the stack.
 
-    # statements() -> statement() LToken.SEMICOL statements() | LToken.END
+    def eat(self, expected: int) -> str:
+        if self.curr_token.token_code != expected:
+            self.error()  # Uhoh!
+        lex: str = self.curr_token.lexeme  # The lexeme we wanna print
+        self.next_token()  # Consume the token by advancing to the next token
+        return lex  # Return the lexeme of the token we just consumed
     def statements(self):
         # Statements -> Statement ; Statements | end
         pass
