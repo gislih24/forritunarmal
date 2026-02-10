@@ -55,26 +55,35 @@ class LParser:
         lex: str = self.curr_token.lexeme  # The lexeme we wanna print
         self.next_token()  # Consume the token by advancing to the next token
         return lex  # Return the lexeme of the token we just consumed
+
+    # statements() -> statement() LToken.SEMICOL statements()
+    #               | LToken.END
     def statements(self):
         # Statements -> Statement ; Statements | end
         pass
 
-    # statement() -> LToken.ID LToken.ASSIGN expr() | LToken.PRINT LToken.ID
+    # statement() -> LToken.ID LToken.ASSIGN expr()
+    #              | LToken.PRINT LToken.ID
     def statement(self):
         # Statement -> id = Expr | print id
         pass
 
-    # expr() -> term() | term() LToken.PLUS expr() | term() LToken.MINUS expr()
+    # expr() -> term()
+    #         | term() LToken.PLUS expr()
+    #         | term() LToken.MINUS expr()
     def expr(self):
         # Expr -> Term | Term + Expr | Term – Expr
         pass
 
-    # term() -> factor() | factor() LToken.MULT term()
+    # term() -> factor()
+    #         | factor() LToken.MULT term()
     def term(self):
         # Term -> Factor | Factor * Term
         pass
 
-    # factor() -> LToken.INT | LToken.ID | LToken.RPAREN expr() LToken.LPAREN
+    # factor() -> LToken.INT
+    #           | LToken.ID
+    #           | LToken.RPAREN expr() LToken.LPAREN
     def factor(self):
         # Factor -> int | id | ( Expr )
         pass
