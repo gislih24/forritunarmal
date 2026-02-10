@@ -50,7 +50,8 @@ class LParser:
     #          element (a value) to the second element (a variable).
     # PRINT : prints the value currently on top of the stack.
 
-    # statements() -> statement() LToken.SEMICOL statements() | LToken.END
+    # statements() -> statement() LToken.SEMICOL statements()
+    #               | LToken.END
     def statements(self):
         # Statements -> Statement ; Statements | end
         if self.curr_token.token_code == LToken.END:
@@ -66,40 +67,26 @@ class LParser:
         else:
             self.error()
 
-    # statement() -> LToken.ID LToken.ASSIGN expr() | LToken.PRINT LToken.ID
+    # statement() -> LToken.ID LToken.ASSIGN expr()
+    #              | LToken.PRINT LToken.ID
     def statement(self):
         # Statement -> id = Expr | print id
-        if self.curr_token.token_code == LToken.PRINT:
-            # consume 'print'
-            self.next_token()
-            if self.curr_token.token_code != LToken.ID:
-                self.error()
-            print(f"PUSH {self.curr_token.lexeme}")
-            print("PRINT")
-            # consume identifier
-            self.next_token()
+        if self.curr_token.token_code == LToken.END:
             return
-        elif self.curr_token.token_code == LToken.ID:
-            # assignment: id = Expr
-            var_name = self.curr_token.lexeme
-            # push the variable first so it's beneath the value on the stack
-            print(f"PUSH {var_name}")
-            # consume 'id'
-            self.next_token()
-            # expect '='
-            if self.curr_token.token_code != LToken.ASSIGN:
+        elif self.curr_token.token_code in (LToken.ID, LToken.PRINT):
+            # Parse a single statement, then expect ';' and continue.
+            self.statement()
+            if self.curr_token.token_code != LToken.SEMICOL:
                 self.error()
-            # consume '='
+            # consume ';'
             self.next_token()
-            # parse the expression (produces the value on top of stack)
-            self.expr()
-            # perform assignment: pop value, then variable
-            print("ASSIGN")
-            return
+            self.statements()
         else:
             self.error()
 
-    # expr() -> term() | term() LToken.PLUS expr() | term() LToken.MINUS expr()
+    # expr() -> term()
+    #         | term() LToken.PLUS expr()
+    #         | term() LToken.MINUS expr()
     def expr(self):
         # Expr -> Term | Term + Expr | Term – Expr
         # Minimal implementation: just a Term for now
@@ -110,7 +97,8 @@ class LParser:
             self.term()
             print("ADD" if op == LToken.PLUS else "SUB")
 
-    # term() -> factor() | factor() LToken.MULT term()
+    # term() -> factor()
+    #         | factor() LToken.MULT term()
     def term(self):
         # Term -> Factor | Factor * Term
         self.factor()
@@ -119,7 +107,9 @@ class LParser:
             self.term()
             print("MULT")
 
-    # factor() -> LToken.INT | LToken.ID | LToken.RPAREN expr() LToken.LPAREN
+    # factor() -> LToken.INT
+    #           | LToken.ID
+    #           | LToken.RPAREN expr() LToken.LPAREN
     def factor(self):
         if self.curr_token.token_code == LToken.LPAREN:
             # consume '('
@@ -148,4 +138,4 @@ class LParser:
 
     @staticmethod
     def error():
-        raise Exception("Syntax error")
+        print("Syntax error")
