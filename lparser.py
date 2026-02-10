@@ -8,7 +8,6 @@ class LParser:
     def __init__(self, lexer: LLexer) -> None:
         self.lexer: LLexer = lexer
         self.curr_token: LToken = LToken()
-        self.ret_str = ""
 
     # -----------------------↓Do not change↓-----------------------
     def parse(self) -> None:
@@ -117,9 +116,9 @@ class LParser:
     def term(self):
         # Term -> Factor | Factor * Term
         self.factor()
-        if self.curr_token.token_code == LToken.MULT:
-            self.next_token()
-            self.term()
+        while self.curr_token.token_code == LToken.MULT:
+            self.next_token()  # consume '*'
+            self.factor()  # parse next factor
             print("MULT")
 
     # factor() -> LToken.INT
@@ -154,3 +153,4 @@ class LParser:
     @staticmethod
     def error():
         print("Syntax error")
+        raise SystemExit
