@@ -54,6 +54,7 @@ class LParser:
     def statements(self):
         # Statements -> Statement ; Statements | end
         if self.curr_token.token_code == LToken.END:
+            print(self.ret_str)
             return
         elif self.curr_token.token_code in (LToken.ID, LToken.PRINT):
             # Parse a single statement, then expect ';' and continue.
@@ -65,7 +66,6 @@ class LParser:
             self.statements()
         else:
             self.error()
-        print(self.ret_str)
 
     # statement() -> LToken.ID LToken.ASSIGN expr() | LToken.PRINT LToken.ID
     def statement(self):
