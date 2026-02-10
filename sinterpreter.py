@@ -19,6 +19,8 @@ class SInterpreter:
         for line in sys.stdin:
             line: str = line.rstrip("\n")
             operations: list[str] = line.split()
+            if not line:
+                continue
 
             if operations[0] == "PUSH":
                 self._push(operations[1])
