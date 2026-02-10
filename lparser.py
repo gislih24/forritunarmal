@@ -90,4 +90,4 @@ class LParser:
 
     @staticmethod
     def error():
-        raise Exception("Syntax error")
+        print("Syntax error")
