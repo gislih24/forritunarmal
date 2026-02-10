@@ -97,3 +97,12 @@ class SInterpreter:
 # intermediate code.
 # It will fetch the next instruction, decode it, and then execute it.
 # The stack is used to keep track of intermediate values during execution.
+
+
+def main() -> None:
+    interpreter = SInterpreter()
+    interpreter.cycle()
+
+
+if __name__ == "__main__":
+    main()
