@@ -1,13 +1,14 @@
 import sys
 from ltoken import LToken
+from typing import Optional, Dict, List, Callable
 
 
 class LLexer:
     def __init__(self) -> None:
         # Single-character pushback buffer (1-char lookahead).
         self.curr_char: str = ""
-        self.lookahead_char: str | None = None
-        self.TOKEN_SINGLE_CHARACTER: dict[str, int] = {
+        self.lookahead_char: Optional[str] = None
+        self.TOKEN_SINGLE_CHARACTER: Dict[str, int] = {
             ";": LToken.SEMICOL,
             "=": LToken.ASSIGN,
             "+": LToken.PLUS,
@@ -29,7 +30,7 @@ class LLexer:
         """Save cur_char to the lookahead_char"""
         self.lookahead_char = self.curr_char
 
-    def _read_chars_while(self, method_to_use) -> str:
+    def _read_chars_while(self, method_to_use: Callable[[str], bool]) -> str:
         """Helper funtion that reads and appends characters to a list, so long
         as each character satisfies the given function.
 
@@ -41,7 +42,7 @@ class LLexer:
         Returns:
             str: The string formed by concatenating the characters read.
         """
-        lexeme_chars: list[str] = []
+        lexeme_chars: List[str] = []
         lexeme_chars.append(self.curr_char)
         self._read_next_char()
         while self.curr_char != "" and method_to_use(self.curr_char):
@@ -77,7 +78,7 @@ class LLexer:
 
         # If it starts with [A-Za-z]+: token_code is PRINT, END, or ID
         elif self.curr_char.isalpha():
-            lexeme: str = self._read_chars_while(str.isalpha)
+            lexeme = self._read_chars_while(str.isalpha)
 
             if lexeme == "print":
                 token_code = LToken.PRINT
@@ -88,7 +89,7 @@ class LLexer:
 
         # If it starts with [0-9]+: token_code is INT
         elif self.curr_char.isdigit():
-            lexeme: str = self._read_chars_while(str.isdigit)
+            lexeme = self._read_chars_while(str.isdigit)
             token_code = LToken.INT
 
         # If it's a single-character token

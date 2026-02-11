@@ -1,10 +1,11 @@
 import sys
+from typing import List, Dict
 
 
 class SInterpreter:
     def __init__(self) -> None:
-        self._stack: list[str] = []  # Stack to hold intermediate values
-        self.variable_storage: dict[str, int] = {}  # Holds values of variables
+        self._stack: List[str] = []  # Stack to hold intermediate values
+        self.variable_storage: Dict[str, int] = {}  # Holds values of variables
         self.COMMANDS = {
             "ADD": self._add,
             "SUB": self._sub,
@@ -22,12 +23,21 @@ class SInterpreter:
             if not line:
                 continue
 
-            if operations[0] == "PUSH":
+            op = operations[0]
+            # Validate and execute
+            if op == "PUSH":
+                if len(operations) < 2:
+                    print("Error for operator: PUSH")
+                    return
                 self._push(operations[1])
-            elif operations[0] in self.COMMANDS:
-                self.COMMANDS[operations[0]]()
-            elif operations[0] == "Syntax" and operations[1] == "error":
-                print("Syntax error")
+            elif op in self.COMMANDS:
+                try:
+                    self.COMMANDS[op]()
+                except Exception:
+                    print(f"Error for operator: {op}")
+                    return
+            else:
+                print(f"Error for operator: {op}")
                 return
 
     # The intermediate language consists of the following commands:
@@ -45,16 +55,14 @@ class SInterpreter:
     # PRINT : prints the value currently on top of the stack.
 
     def _pop_var_from_stack(self) -> int:
-        var: str | int = self._stack.pop()
+        var = self._stack.pop()
         if var in self.variable_storage:
             return self.variable_storage[var]
-        else:
-            try:
-                return int(var)
-            except ValueError:
-                raise ValueError(
-                    f"Variable {var} not found in storage and cannot be converted to int."
-                )
+        try:
+            return int(var)
+        except ValueError:
+            # Default value for an undefined variable is 0
+            return 0
 
     def _push(self, op: str) -> None:
         # Pushes the operand op onto the stack.

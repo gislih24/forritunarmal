@@ -103,22 +103,24 @@ class LParser:
     #         | term() LToken.MINUS expr()
     def expr(self):
         # Expr -> Term | Term + Expr | Term – Expr
-        # Minimal implementation: just a Term for now
+        # Use right-recursive parsing to delay operator emission until
+        # the entire right-hand side is successfully parsed.
         self.term()
-        while self.curr_token.token_code in (LToken.PLUS, LToken.MINUS):
+        if self.curr_token.token_code in (LToken.PLUS, LToken.MINUS):
             op = self.curr_token.token_code
             self.next_token()  # consume '+' or '-'
-            self.term()
+            self.expr()  # parse the right Expr recursively
             print("ADD" if op == LToken.PLUS else "SUB")
 
     # term() -> factor()
     #         | factor() LToken.MULT term()
     def term(self):
         # Term -> Factor | Factor * Term
+        # Use right-recursive parsing similar to Expr to delay emission.
         self.factor()
-        while self.curr_token.token_code == LToken.MULT:
+        if self.curr_token.token_code == LToken.MULT:
             self.next_token()  # consume '*'
-            self.factor()  # parse next factor
+            self.term()  # parse the right Term recursively
             print("MULT")
 
     # factor() -> LToken.INT

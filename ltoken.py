@@ -1,3 +1,6 @@
+from typing import Dict
+
+
 class LToken:
     ID = 1
     ASSIGN = 2
@@ -12,7 +15,7 @@ class LToken:
     END = 11
     ERROR = 12
 
-    _NAMES: dict[int, str] = {
+    _names: Dict[int, str] = {
         ID: "ID",
         ASSIGN: "ASSIGN",
         SEMICOL: "SEMICOL",
@@ -33,9 +36,7 @@ class LToken:
 
     @property
     def name(self) -> str:
-        return self._NAMES.get(
-            self.token_code, f"ERROR:UNKNOWN({self.token_code})"
-        )
+        return self._names.get(self.token_code, f"ERROR:UNKNOWN({self.token_code})")
 
     def __repr__(self) -> str:
         return f"LToken({self.name}, {self.lexeme})"
